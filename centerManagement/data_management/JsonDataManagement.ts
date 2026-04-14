@@ -1,18 +1,19 @@
 import * as fs from 'fs';
+import * as path from 'path';
 
-export class JsonDataManagement{
+export class JsonDataManagement {
 
-    static async getUserById(env: string, jsonData: string, userId: string){
-        const jsonFile = await fs.readFileSync(`../Workflow_Framenwork/jsonData/${env!}/${jsonData}.json`, 'utf-8');
-        const user = await JSON.parse(jsonFile).find((u: { id: string; }) => u.id = userId);
-
+    static getUserById(env: string, jsonData: string, userId: string) {
+        const filePath = path.resolve(__dirname, `../../jsonData/${env}/${jsonData}.json`);
+        const jsonFile = fs.readFileSync(filePath, 'utf-8');
+        const user = JSON.parse(jsonFile).find((u: { id: string }) => u.id === userId);
         return user;
     }
 
-    static async getUserByName(env: string, jsonData: string, username: string){
-        const jsonFile = await fs.readFileSync(`../Workflow_Framenwork/jsonData/${env!}/${jsonData}.json`, 'utf-8');
-        const user = await JSON.parse(jsonFile).find((u: { username: string; }) => u.username = username);
-        
+    static getUserByName(env: string, jsonData: string, username: string) {
+        const filePath = path.resolve(__dirname, `../../jsonData/${env}/${jsonData}.json`);
+        const jsonFile = fs.readFileSync(filePath, 'utf-8');
+        const user = JSON.parse(jsonFile).find((u: { username: string }) => u.username === username);
         return user;
     }
 }

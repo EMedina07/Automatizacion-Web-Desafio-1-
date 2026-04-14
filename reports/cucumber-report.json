@@ -4,363 +4,91 @@
     "elements": [
       {
         "description": "",
-        "id": "campanias-contact-center;verify-that-in-workflow-any-campania-can-be-seleted",
-        "keyword": "Scenario Outline",
-        "line": 11,
-        "name": "Verify that in workflow any campania can be seleted",
-        "steps": [
-          {
-            "keyword": "Before",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 1183560999
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 5,
-            "name": "the user access to he login page with the \"emedina\"",
-            "match": {
-              "location": "src\\test\\stepsDefinitions\\login\\LoginSuccessfulStepsDefinition.ts:14"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 32841072600
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 6,
-            "name": "the user select the \"BASE UNIFICADA TU 2024-11\"",
-            "match": {
-              "location": "src\\test\\stepsDefinitions\\campanias\\CampaniaStepDefinitions.ts:7"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 2708303099
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 7,
-            "name": "the campania details should be show it",
-            "match": {
-              "location": "src\\test\\stepsDefinitions\\campanias\\CampaniaStepDefinitions.ts:16"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 1928719299
-            }
-          },
-          {
-            "keyword": "After",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 283031999
-            }
-          }
-        ],
-        "tags": [
-          {
-            "name": "@test",
-            "line": 3
-          }
-        ],
-        "type": "scenario"
-      },
-      {
-        "description": "",
-        "id": "campanias-contact-center;verify-that-in-workflow-any-campania-can-be-seleted",
-        "keyword": "Scenario Outline",
-        "line": 12,
-        "name": "Verify that in workflow any campania can be seleted",
-        "steps": [
-          {
-            "keyword": "Before",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 1130970399
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 5,
-            "name": "the user access to he login page with the \"emedina\"",
-            "match": {
-              "location": "src\\test\\stepsDefinitions\\login\\LoginSuccessfulStepsDefinition.ts:14"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 32676858200
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 6,
-            "name": "the user select the \"SEGUNDA BASE TU 2024-12\"",
-            "match": {
-              "location": "src\\test\\stepsDefinitions\\campanias\\CampaniaStepDefinitions.ts:7"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 1614968400
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 7,
-            "name": "the campania details should be show it",
-            "match": {
-              "location": "src\\test\\stepsDefinitions\\campanias\\CampaniaStepDefinitions.ts:16"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 3932536099
-            }
-          },
-          {
-            "keyword": "After",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 359756199
-            }
-          }
-        ],
-        "tags": [
-          {
-            "name": "@test",
-            "line": 3
-          }
-        ],
-        "type": "scenario"
-      },
-      {
-        "description": "",
-        "id": "campanias-contact-center;verify-that-in-workflow-any-campania-can-be-seleted",
+        "id": "formulario-de-contacto;enviar-formulario-de-contacto-exitosamente",
         "keyword": "Scenario Outline",
         "line": 13,
-        "name": "Verify that in workflow any campania can be seleted",
+        "name": "Enviar formulario de contacto exitosamente",
         "steps": [
-          {
-            "keyword": "Before",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 1071252500
-            }
-          },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 5,
-            "name": "the user access to he login page with the \"emedina\"",
+            "name": "el usuario navega al sitio elaniin",
             "match": {
-              "location": "src\\test\\stepsDefinitions\\login\\LoginSuccessfulStepsDefinition.ts:14"
+              "location": "src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:12"
             },
             "result": {
               "status": "passed",
-              "duration": 32887597500
+              "duration": 1046779600
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
             "line": 6,
-            "name": "the user select the \"BASE RIESGOS 2025-01\"",
+            "name": "navega a la seccion Contact Us",
             "match": {
-              "location": "src\\test\\stepsDefinitions\\campanias\\CampaniaStepDefinitions.ts:7"
+              "location": "src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:16"
             },
             "result": {
               "status": "passed",
-              "duration": 2186721900
+              "duration": 4609515400
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "completa el formulario con user \"1\"",
+            "match": {
+              "location": "src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:20"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 153272399
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "hace clic en Send message",
+            "match": {
+              "location": "src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:30"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2211918899
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 7,
-            "name": "the campania details should be show it",
+            "line": 9,
+            "name": "el formulario se envia exitosamente",
             "match": {
-              "location": "src\\test\\stepsDefinitions\\campanias\\CampaniaStepDefinitions.ts:16"
+              "location": "src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:34"
             },
             "result": {
               "status": "passed",
-              "duration": 1883973299
-            }
-          },
-          {
-            "keyword": "After",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 305779399
+              "duration": 2638144800
             }
           }
         ],
         "tags": [
           {
-            "name": "@test",
-            "line": 3
-          }
-        ],
-        "type": "scenario"
-      },
-      {
-        "description": "",
-        "id": "campanias-contact-center;verify-that-in-workflow-any-campania-can-be-seleted",
-        "keyword": "Scenario Outline",
-        "line": 14,
-        "name": "Verify that in workflow any campania can be seleted",
-        "steps": [
-          {
-            "keyword": "Before",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 1100852599
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 5,
-            "name": "the user access to he login page with the \"emedina\"",
-            "match": {
-              "location": "src\\test\\stepsDefinitions\\login\\LoginSuccessfulStepsDefinition.ts:14"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 32506918000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 6,
-            "name": "the user select the \"SPRINT 2.0 2025-01\"",
-            "match": {
-              "location": "src\\test\\stepsDefinitions\\campanias\\CampaniaStepDefinitions.ts:7"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 2173253200
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 7,
-            "name": "the campania details should be show it",
-            "match": {
-              "location": "src\\test\\stepsDefinitions\\campanias\\CampaniaStepDefinitions.ts:16"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 1901225399
-            }
-          },
-          {
-            "keyword": "After",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 259068099
-            }
-          }
-        ],
-        "tags": [
-          {
-            "name": "@test",
+            "name": "@contactUs",
             "line": 3
           }
         ],
         "type": "scenario"
       }
     ],
-    "id": "campanias-contact-center",
+    "id": "formulario-de-contacto",
     "line": 1,
     "keyword": "Feature",
-    "name": "Campanias Contact Center",
+    "name": "Formulario de contacto",
     "tags": [],
-    "uri": "src\\test\\features\\Campanias\\Campania.feature"
-  },
-  {
-    "description": "",
-    "elements": [
-      {
-        "description": "",
-        "id": "login;access-to-portal-corporativo-apa",
-        "keyword": "Scenario Outline",
-        "line": 10,
-        "name": "Access to portal corporativo apa",
-        "steps": [
-          {
-            "keyword": "Before",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 1013825100
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 5,
-            "name": "the user access to he login page with the \"emedina\"",
-            "match": {
-              "location": "src\\test\\stepsDefinitions\\login\\LoginSuccessfulStepsDefinition.ts:14"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 32816152499
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 6,
-            "name": "the user would be on the home page",
-            "match": {
-              "location": "src\\test\\stepsDefinitions\\login\\LoginSuccessfulStepsDefinition.ts:23"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 32809000
-            }
-          },
-          {
-            "keyword": "After",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 260031599
-            }
-          }
-        ],
-        "tags": [
-          {
-            "name": "@test",
-            "line": 3
-          }
-        ],
-        "type": "scenario"
-      }
-    ],
-    "id": "login",
-    "line": 1,
-    "keyword": "Feature",
-    "name": "Login",
-    "tags": [],
-    "uri": "src\\test\\features\\Login\\LoginSuccessful.feature"
+    "uri": "src\\test\\features\\contactUs\\ContactUs.feature"
   }
 ]
