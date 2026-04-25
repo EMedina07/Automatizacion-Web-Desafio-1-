@@ -1,17 +1,27 @@
-interface EnvironmentSettings {
-  env: string;
-  baseURL: string;
+import dotenv from 'dotenv';
+import path from 'path';
+
+const VALID_ENVIRONMENTS = ['qa', 'cert'] as const;
+type SupportedEnvironment = typeof VALID_ENVIRONMENTS[number];
+
+const rawEnv = process.env.ENV ?? 'qa';
+
+if (!(VALID_ENVIRONMENTS as readonly string[]).includes(rawEnv)) {
+  throw new Error(
+    `Invalid ENV "${rawEnv}". Supported environments: ${VALID_ENVIRONMENTS.join(', ')}`
+  );
 }
 
-const enviroments: Record<string, EnvironmentSettings> = {
-  qa:  { 
-    env: 'qa',
-    baseURL: 'https://web.elaniin.dev/'
-  },
-  cert:{ 
-    env: '',
-    baseURL: ''
-  }
-};
+const env = rawEnv as SupportedEnvironment;
 
-export default enviroments[process.env.ENV || 'qa'];
+dotenv.config({ path: path.resolve(process.cwd(), `.env.${env}`) });
+
+const baseURL = process.env.BASE_URL;
+
+if (!baseURL) {
+  throw new Error(
+    `BASE_URL is not defined. Create a .env.${env} file with BASE_URL=https://your-url.com`
+  );
+}
+
+export default { env, baseURL };

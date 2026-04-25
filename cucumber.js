@@ -1,8 +1,8 @@
 module.exports = {
     default: {
         require: [
-            'src/test/stepsDefinitions/**/*.ts',
-            '"centerManagement/settings/**/*.ts"'
+            'src/support/**/*.ts',
+            'src/test/stepsDefinitions/**/*.ts'
         ],
         format: [
             'json:reports/cucumber-report.json',

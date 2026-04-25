@@ -3,6 +3,7 @@
     "@cucumber/cucumber": "^12.8.0",
     "@playwright/test": "^1.59.1",
     "@types/node": "^24.3.0",
+    "cross-env": "^7.0.3",
     "dotenv": "^17.4.2",
     "multiple-cucumber-html-reporter": "^3.9.3",
     "playwright": "^1.59.1",
@@ -10,9 +11,12 @@
     "typescript": "^5.9.2"
   },
   "scripts": {
-    "test": "cucumber-js --require-module ts-node/register --require tests/steps/**/*.ts",
-    "test:qa": "ENV=qa npm run test",
-    "test:dev": "ENV=cert npm run test",
+    "test": "cucumber-js",
+    "test:qa": "cross-env ENV=qa cucumber-js",
+    "test:qa:video": "cross-env ENV=qa RECORD_VIDEO=true cucumber-js",
+    "test:qa:video:report": "cross-env ENV=qa RECORD_VIDEO=true cucumber-js && cross-env ENV=qa node report.js",
+    "test:cert": "cross-env ENV=cert cucumber-js",
+    "test:qa:report": "cross-env ENV=qa cucumber-js && cross-env ENV=qa node report.js",
     "report": "node report.js"
   }
 }

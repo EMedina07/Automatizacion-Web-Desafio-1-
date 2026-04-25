@@ -1,9 +1,11 @@
 const report = require("multiple-cucumber-html-reporter");
+const { execSync } = require("child_process");
+const path = require("path");
 
 report.generate({
-  jsonDir: "reports",           
-  reportPath: "reports/html",   
-  reportName: "Cucumber Report", 
+  jsonDir: "reports",
+  reportPath: "reports/html",
+  reportName: "Cucumber Report",
   pageTitle: "Resultados de pruebas",
   displayDuration: true,
   metadata: {
@@ -22,9 +24,26 @@ report.generate({
     data: [
       { label: "Project", value: "Workflow" },
       { label: "Release", value: "1.0.0" },
-      { label: "Environment", value: process.env.ENV.toUpperCase() },
+      { label: "Environment", value: (process.env.ENV ?? "unknown").toUpperCase() },
       { label: "SDET Engineer", value: "Ezequiel Medina Adames" },
       { label: "Executed", value: new Date().toLocaleString() },
     ],
   },
 });
+
+const reportPath = path.resolve("reports", "html", "index.html");
+console.log(`\nReporte generado: ${reportPath}`);
+
+if (!process.env.CI) {
+  try {
+    if (process.platform === "win32") {
+      execSync(`cmd /c start "" "${reportPath}"`);
+    } else if (process.platform === "darwin") {
+      execSync(`open "${reportPath}"`);
+    } else {
+      execSync(`xdg-open "${reportPath}"`);
+    }
+  } catch {
+    console.log("Abre manualmente el reporte en tu browser.");
+  }
+}

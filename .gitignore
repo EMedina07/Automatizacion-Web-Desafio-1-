@@ -1,10 +1,15 @@
-
-# Playwright
+# Dependencies
 node_modules/
+
+# Environment variables (never commit real env files)
+.env.*
+!.env.example
+
+# Test results and reports
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-
-# Playwright
 /playwright/.auth/
+/reports/
+/allure-report/
