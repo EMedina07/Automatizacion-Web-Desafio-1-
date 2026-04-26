@@ -1,10 +1,12 @@
 import { expect, Page } from '@playwright/test';
-import { COUNTRY_MAP } from '../../centerManagement/framework_actions/constants';
-import environments from '../../centerManagement/settings/EnvironmentSettings';
+import { COUNTRY_MAP } from '../../core/framework_actions/constants';
+import environments from '../../core/settings/EnvironmentSettings';
+import { BasePage } from './BasePage';
 
-export class ContactUsPage {
-
-  constructor(private page: Page) {}
+export class ContactUsPage extends BasePage {
+  constructor(page: Page) {
+    super(page);
+  }
 
   async goToContactUs() {
     await this.page.goto(environments.baseURL);
@@ -20,7 +22,13 @@ export class ContactUsPage {
   }
 
   async enterPhone(country: string, phone: string) {
-    await this.page.locator('#countryCode').selectOption(COUNTRY_MAP[country]);
+    const countryValue = COUNTRY_MAP[country];
+    if (!countryValue) {
+      throw new Error(
+        `Country "${country}" not found in COUNTRY_MAP. Available: ${Object.keys(COUNTRY_MAP).join(', ')}`
+      );
+    }
+    await this.page.locator('#countryCode').selectOption(countryValue);
     await this.page.getByPlaceholder('00 0000 0000').fill(phone);
   }
 
@@ -39,10 +47,14 @@ export class ContactUsPage {
   // --- Assertions ---
 
   async assertOnContactPage() {
-    await expect(this.page.getByRole('heading', { level: 1, name: 'Get in touch with us' })).toBeVisible();
+    await expect(
+      this.page.getByRole('heading', { level: 1, name: 'Get in touch with us' })
+    ).toBeVisible();
   }
 
   async assertSubmissionSuccess() {
-    await expect(this.page.getByRole('heading', { name: 'Thank you for reaching out' })).toBeVisible();
+    await expect(
+      this.page.getByRole('heading', { name: 'Thank you for reaching out' })
+    ).toBeVisible();
   }
 }

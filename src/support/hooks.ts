@@ -33,9 +33,12 @@ Before(async function (this: CustomWorld) {
 
 After(async function (this: CustomWorld, scenario) {
   const failed = scenario.result?.status === 'FAILED';
-  const scenarioName = scenario.pickle.name.replace(/\s+/g, '-').toLowerCase();
+  const willBeRetried = (scenario.result as { willBeRetried?: boolean })?.willBeRetried ?? false;
+  const scenarioSlug = scenario.pickle.name.replace(/\s+/g, '-').toLowerCase();
+  const filePrefix = `${scenarioSlug}-${scenario.pickle.id.slice(0, 8)}`;
 
-  if (failed) {
+  if (failed && !willBeRetried) {
+    // Final failure — save all evidence
     const screenshot = await this.page?.screenshot({ fullPage: true });
     if (screenshot) this.attach(screenshot, 'image/png');
 
@@ -47,21 +50,30 @@ After(async function (this: CustomWorld, scenario) {
     }
 
     await this.context?.tracing.stop({
-      path: path.join('test-results', 'traces', `${scenarioName}.zip`),
+      path: path.join('test-results', 'traces', `${filePrefix}.zip`),
     });
 
-    // get video path before closing context (file is finalized on close)
     const videoPath = await this.page?.video()?.path();
-
     await this.context?.close();
     await this.browser?.close();
 
     if (videoPath && fs.existsSync(videoPath)) {
-      const dest = path.join('test-results', 'videos', `${scenarioName}.webm`);
+      const dest = path.join('test-results', 'videos', `${filePrefix}.webm`);
       fs.renameSync(videoPath, dest);
       this.attach(`Video del fallo: ${path.resolve(dest)}`, 'text/plain');
     }
+  } else if (failed && willBeRetried) {
+    // Intermediate failure — discard evidence and prepare clean slate for retry
+    const videoPath = await this.page?.video()?.path();
+    await this.context?.tracing.stop();
+    await this.context?.close();
+    await this.browser?.close();
+
+    if (videoPath && fs.existsSync(videoPath)) {
+      fs.unlinkSync(videoPath);
+    }
   } else {
+    // Passed (first attempt or successful retry)
     await this.context?.tracing.stop();
     await this.context?.close();
     await this.browser?.close();

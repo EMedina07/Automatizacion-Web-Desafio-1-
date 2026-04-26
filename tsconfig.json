@@ -13,12 +13,6 @@
     "resolveJsonModule": true,
     "types": ["node", "@cucumber/cucumber"]
   },
-  "include": [
-    "**/*.ts",
-    "cucumber.js"
-   ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["**/*.ts", "cucumber.js"],
+  "exclude": ["node_modules", "dist", "report.ts"]
 }

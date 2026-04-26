@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 const VALID_ENVIRONMENTS = ['qa', 'cert'] as const;
-type SupportedEnvironment = typeof VALID_ENVIRONMENTS[number];
+type SupportedEnvironment = (typeof VALID_ENVIRONMENTS)[number];
 
 const rawEnv = process.env.ENV ?? 'qa';
 

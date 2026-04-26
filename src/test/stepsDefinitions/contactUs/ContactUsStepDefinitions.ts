@@ -1,8 +1,9 @@
 import { Given, Then, When } from '@cucumber/cucumber';
 import { ContactUsPage } from '../../../pages/ContactUsPage';
-import { JsonDataManagement } from '../../../../centerManagement/data_management/JsonDataManagement';
-import environments from '../../../../centerManagement/settings/EnvironmentSettings';
+import { JsonDataManagement } from '../../../../core/data_management/JsonDataManagement';
+import environments from '../../../../core/settings/EnvironmentSettings';
 import { CustomWorld } from '../../../support/world';
+import { UserData } from '../../../../core/interfaces/UserData';
 
 Given('el usuario navega al sitio elaniin', async function (this: CustomWorld) {
   this.getPage(ContactUsPage);
@@ -14,7 +15,7 @@ When('navega a la seccion Contact Us', async function (this: CustomWorld) {
 });
 
 When('completa el formulario con user {string}', async function (this: CustomWorld, userId: string) {
-  const userData = JsonDataManagement.getUserById(environments.env, 'users', userId);
+  const userData = JsonDataManagement.getById<UserData>(environments.env, 'users', userId);
   const contactUs = this.getPage(ContactUsPage);
 
   await contactUs.enterName(userData.name);

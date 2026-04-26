@@ -14,7 +14,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1732119600
+              "duration": 1419507700
             }
           },
           {
@@ -23,11 +23,11 @@
             "line": 5,
             "name": "el usuario navega al sitio elaniin",
             "match": {
-              "location": "src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:7"
+              "location": "src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:8"
             },
             "result": {
               "status": "passed",
-              "duration": 536799
+              "duration": 17782000
             }
           },
           {
@@ -36,12 +36,12 @@
             "line": 6,
             "name": "navega a la seccion Contact Us",
             "match": {
-              "location": "src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:11"
+              "location": "src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:12"
             },
             "result": {
               "status": "failed",
-              "duration": 41349731200,
-              "error_message": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('navigation').getByRole('link', { name: 'Contact Us' })\u001b[22m\n\n    at ContactUsPage.goToContactUs (C:\\Users\\emedi\\OneDrive\\Desktop\\Framenwork\\Playwright_Framenwork\\src\\pages\\ContactUsPage.ts:11:87)\n    at async CustomWorld.<anonymous> (C:\\Users\\emedi\\OneDrive\\Desktop\\Framenwork\\Playwright_Framenwork\\src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:12:3)"
+              "duration": 46811281199,
+              "error_message": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('navigation').getByRole('link', { name: 'Contact Us' })\u001b[22m\n\n    at ContactUsPage.goToContactUs (C:\\Users\\emedi\\OneDrive\\Desktop\\Framenwork\\Playwright_Framenwork\\src\\pages\\ContactUsPage.ts:13:87)\n    at async CustomWorld.<anonymous> (C:\\Users\\emedi\\OneDrive\\Desktop\\Framenwork\\Playwright_Framenwork\\src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:13:3)"
             }
           },
           {
@@ -50,7 +50,7 @@
             "line": 7,
             "name": "completa el formulario con user \"1\"",
             "match": {
-              "location": "src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:16"
+              "location": "src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:17"
             },
             "result": {
               "status": "skipped",
@@ -63,7 +63,7 @@
             "line": 8,
             "name": "hace clic en Send message",
             "match": {
-              "location": "src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:27"
+              "location": "src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:28"
             },
             "result": {
               "status": "skipped",
@@ -76,7 +76,7 @@
             "line": 9,
             "name": "el formulario se envia exitosamente",
             "match": {
-              "location": "src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:31"
+              "location": "src\\test\\stepsDefinitions\\contactUs\\ContactUsStepDefinitions.ts:32"
             },
             "result": {
               "status": "skipped",
@@ -88,7 +88,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 10692812699
+              "duration": 5997312899
             },
             "embeddings": [
               {
@@ -104,7 +104,7 @@
                 "mime_type": "text/plain"
               },
               {
-                "data": "VmlkZW8gZGVsIGZhbGxvOiBDOlxVc2Vyc1xlbWVkaVxPbmVEcml2ZVxEZXNrdG9wXEZyYW1lbndvcmtcUGxheXdyaWdodF9GcmFtZW53b3JrXHRlc3QtcmVzdWx0c1x2aWRlb3NcZW52aWFyLWZvcm11bGFyaW8tZGUtY29udGFjdG8tZXhpdG9zYW1lbnRlLndlYm0=",
+                "data": "VmlkZW8gZGVsIGZhbGxvOiBDOlxVc2Vyc1xlbWVkaVxPbmVEcml2ZVxEZXNrdG9wXEZyYW1lbndvcmtcUGxheXdyaWdodF9GcmFtZW53b3JrXHRlc3QtcmVzdWx0c1x2aWRlb3NcZW52aWFyLWZvcm11bGFyaW8tZGUtY29udGFjdG8tZXhpdG9zYW1lbnRlLTg2YmZlNmEzLndlYm0=",
                 "mime_type": "text/plain"
               }
             ]

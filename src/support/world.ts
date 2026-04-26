@@ -7,7 +7,7 @@ export class CustomWorld extends World {
   page!: Page;
   consoleLogs: string[] = [];
 
-  private readonly pageCache = new Map<Function, unknown>();
+  private readonly pageCache = new Map<new (page: Page) => unknown, unknown>();
 
   constructor(options: IWorldOptions) {
     super(options);
