@@ -28,13 +28,7 @@ jobs:
       - name: Run E2E Tests (QA)
         run: npm run test:qa
         env:
-          ENV: qa
-
-      - name: Generate HTML Report
-        if: always()
-        run: node report.js
-        env:
-          ENV: qa
+          CI: true
 
       - name: Upload Cucumber Report
         uses: actions/upload-artifact@v4
