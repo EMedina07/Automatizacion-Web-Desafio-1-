@@ -1,4 +1,5 @@
-import { After, Before, BeforeAll, setDefaultTimeout } from '@cucumber/cucumber';
+import { After, AfterStep, Before, BeforeAll, setDefaultTimeout } from '@cucumber/cucumber';
+import { renderSkippedCard } from '../../core/framework_actions/StepLogger';
 import * as fs from 'fs';
 import * as path from 'path';
 import { chromium } from 'playwright';
@@ -60,6 +61,14 @@ Before(async function (this: CustomWorld, scenario) {
   this.page.on('pageerror', (err) => {
     this.consoleLogs.push(`[page.error] ${err.message}`);
   });
+});
+
+AfterStep(async function (this: CustomWorld, { pickleStep, result }) {
+  if ((result.status as string) === 'SKIPPED') {
+    this.stepCounter.value++;
+    const card = renderSkippedCard(this.stepCounter.value, pickleStep.text);
+    await this.attach(card, 'text/html');
+  }
 });
 
 After(async function (this: CustomWorld, scenario) {

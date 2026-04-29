@@ -5,6 +5,7 @@ import { JsonDataManagement } from '../../../../core/data_management/JsonDataMan
 import environments from '../../../../core/settings/EnvironmentSettings';
 import { CustomWorld } from '../../../support/world';
 import { LoginData } from '../../../../core/interfaces/LoginData';
+import { renderTimingCard } from '../../../../core/framework_actions/StepLogger';
 
 interface LoginWorld extends CustomWorld {
   loginResponseTime?: number;
@@ -49,11 +50,13 @@ Then('el sistema no ejecuta el payload y muestra error de credenciales', async f
 When('el usuario inicia sesión con {string} y se registra el tiempo de respuesta', async function (this: LoginWorld, dataId: string) {
   const data = JsonDataManagement.getById<LoginData>(environments.env, 'login', dataId);
   const elapsed = await this.getPage(LoginPage).loginWithTiming(data.username, data.password);
-  this.attach(`Tiempo de respuesta: ${elapsed}ms`, 'text/plain');
   this.loginResponseTime = elapsed;
 });
 
 Then('el tiempo de respuesta es menor a {int} milisegundos', function (this: LoginWorld, threshold: number) {
   expect(this.loginResponseTime).toBeDefined();
-  expect(this.loginResponseTime!).toBeLessThan(threshold);
+  const elapsed = this.loginResponseTime!;
+  const card = renderTimingCard(elapsed, threshold, 'Tiempo de respuesta del login');
+  this.attach(card, 'text/html');
+  expect(elapsed).toBeLessThan(threshold);
 });
