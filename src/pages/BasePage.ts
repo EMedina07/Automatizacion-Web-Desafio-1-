@@ -108,6 +108,63 @@ export abstract class BasePage {
     );
   }
 
+  // Selecciona una opción de un <select> nativo por valor, label o índice
+  protected async selectOption(
+    locator: Locator,
+    value: string,
+    fieldLabel = 'campo',
+  ): Promise<void> {
+    await this.captureAction(
+      'SELECT',
+      `Selecciona "${value}" en ${fieldLabel}`,
+      `locator.selectOption('${value}')`,
+      async () => { await locator.selectOption(value); },
+    );
+  }
+
+  // Marca o desmarca un checkbox o radio button
+  protected async checkElement(
+    locator: Locator,
+    elementLabel = 'elemento',
+    checked = true,
+  ): Promise<void> {
+    const verb = checked ? 'Marca' : 'Desmarca';
+    await this.captureAction(
+      'CHECK',
+      `${verb} ${elementLabel}`,
+      `locator.setChecked(${checked})`,
+      async () => { await locator.setChecked(checked); },
+    );
+  }
+
+  // Selecciona un registro de una lista, tabla de resultados o autocomplete
+  protected async chooseRecord(
+    locator: Locator,
+    recordLabel = 'registro',
+  ): Promise<void> {
+    await this.captureAction(
+      'CHOOSE',
+      `Selecciona registro: ${recordLabel}`,
+      `locator.click()`,
+      async () => { await locator.click(); },
+    );
+  }
+
+  // Sube uno o varios archivos a un input de tipo file
+  protected async uploadFile(
+    locator: Locator,
+    filePaths: string | string[],
+    fieldLabel = 'archivo',
+  ): Promise<void> {
+    const display = Array.isArray(filePaths) ? filePaths.join(', ') : filePaths;
+    await this.captureAction(
+      'UPLOAD',
+      `Sube "${display}" en ${fieldLabel}`,
+      `locator.setInputFiles('${display}')`,
+      async () => { await locator.setInputFiles(filePaths); },
+    );
+  }
+
   async takeScreenshot(name: string): Promise<Buffer> {
     return this.page.screenshot({ fullPage: true, path: `test-results/${name}.png` });
   }

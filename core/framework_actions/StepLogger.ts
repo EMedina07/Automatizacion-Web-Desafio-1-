@@ -1,12 +1,25 @@
 export type IAttachFn = (data: Buffer | string, mediaType: string) => void | Promise<void>;
-export type ActionType = 'NAVIGATE' | 'FILL' | 'CLICK' | 'ASSERT' | 'ACTION';
+export type ActionType =
+  | 'NAVIGATE'  // goto a URL
+  | 'FILL'      // escribir en un campo de texto
+  | 'CLICK'     // clic en botón o enlace
+  | 'SELECT'    // seleccionar opción de dropdown / combobox
+  | 'CHECK'     // marcar o desmarcar checkbox / radio
+  | 'CHOOSE'    // seleccionar un registro de una lista o tabla de resultados
+  | 'UPLOAD'    // subir un archivo
+  | 'ASSERT'    // verificación / assertion
+  | 'ACTION';   // acción genérica que no encaja en las anteriores
 
 const BADGE_COLORS: Record<ActionType, string> = {
-  NAVIGATE: '#3b82f6',
-  FILL:     '#8b5cf6',
-  CLICK:    '#f59e0b',
-  ASSERT:   '#10b981',
-  ACTION:   '#64748b',
+  NAVIGATE: '#3b82f6',  // azul
+  FILL:     '#8b5cf6',  // violeta
+  CLICK:    '#f59e0b',  // ámbar
+  SELECT:   '#06b6d4',  // cyan
+  CHECK:    '#6366f1',  // índigo
+  CHOOSE:   '#f97316',  // naranja
+  UPLOAD:   '#14b8a6',  // teal
+  ASSERT:   '#10b981',  // verde (rojo en fallo)
+  ACTION:   '#64748b',  // gris
 };
 
 const FAIL_COLOR = '#ef4444';
