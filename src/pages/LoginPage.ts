@@ -12,6 +12,7 @@ export class LoginPage extends PageHelpers {
   private readonly loginButton: Locator;
   private readonly fieldErrorMessages: Locator;
   private readonly credentialsError: Locator;
+  private readonly sidebarMenu: Locator;
 
   constructor(page: Page, attachFn?: IAttachFn, stepCounter?: { value: number }) {
     super(page, attachFn, stepCounter);
@@ -20,6 +21,7 @@ export class LoginPage extends PageHelpers {
     this.loginButton = page.getByRole('button', { name: 'Login' });
     this.fieldErrorMessages = page.locator('.oxd-input-field-error-message');
     this.credentialsError = page.locator('.orangehrm-login-error');
+    this.sidebarMenu = page.locator('div.oxd-main-menu');
   }
 
   async navigateTo(): Promise<void> {
@@ -39,7 +41,11 @@ export class LoginPage extends PageHelpers {
   }
 
   async assertOnDashboard(): Promise<void> {
-    await this.assertUrlMatches(DASHBOARD_URL_FRAGMENT, 'Verifica redirección al dashboard');
+    await this.assertUrlMatchesWithElement(
+      DASHBOARD_URL_FRAGMENT,
+      this.sidebarMenu,
+      'Verifica redirección al dashboard',
+    );
   }
 
   async assertOnLoginPage(): Promise<void> {

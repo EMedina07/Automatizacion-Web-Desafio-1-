@@ -67,6 +67,26 @@ export abstract class PageHelpers extends BasePage {
     );
   }
 
+  // Igual que assertUrlMatches pero además espera que anchorLocator sea visible,
+  // garantizando que el framework renderizó la página antes del screenshot.
+  // Usar cuando la navegación es client-side (SPA) y la URL cambia antes de que
+  // los componentes estén montados.
+  protected async assertUrlMatchesWithElement(
+    urlPattern: string,
+    anchorLocator: Locator,
+    description: string,
+    timeout = 15_000,
+  ): Promise<void> {
+    await this.assertCapture(
+      description,
+      `page.waitForURL('${urlPattern}')\nwaitForLocator(anchor)`,
+      async () => {
+        await this.page.waitForURL(urlPattern, { timeout });
+        await this.waitForLocator(anchorLocator, timeout);
+      },
+    );
+  }
+
   protected async assertLocatorText(
     locator: Locator,
     text: string,

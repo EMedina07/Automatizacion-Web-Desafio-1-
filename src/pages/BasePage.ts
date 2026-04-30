@@ -8,6 +8,22 @@ export abstract class BasePage {
     private readonly stepCounter?: { value: number },
   ) {}
 
+  // Espera dos ciclos de animación para que Vue/React termine de pintar la UI
+  // antes de tomar el screenshot. Evita capturas en blanco cuando el DOM
+  // ya existe pero el renderizado visual aún no se completó.
+  private async waitForVisualStability(): Promise<void> {
+    try {
+      // Si hubo una navegación, espera que el DOM del nuevo documento esté listo
+      await this.page.waitForLoadState('domcontentloaded', { timeout: 5_000 });
+    } catch {}
+    try {
+      // Dos ciclos de animación garantizan que Vue/React terminó de pintar
+      await this.page.evaluate(
+        'new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))',
+      );
+    } catch {}
+  }
+
   private async captureAction(
     type: ActionType,
     description: string,
@@ -17,6 +33,7 @@ export abstract class BasePage {
     await action();
     if (!this.attachFn || !this.stepCounter) return;
     try {
+      await this.waitForVisualStability();
       const screenshot = await this.page.screenshot({ fullPage: false });
       this.stepCounter.value++;
       const card = renderCard(this.stepCounter.value, type, description, code, screenshot, false);
@@ -41,6 +58,7 @@ export abstract class BasePage {
 
     if (this.attachFn && this.stepCounter) {
       try {
+        await this.waitForVisualStability();
         const screenshot = await this.page.screenshot({ fullPage: false });
         this.stepCounter.value++;
         const card = renderCard(this.stepCounter.value, 'ASSERT', description, code, screenshot, failed);
@@ -70,6 +88,7 @@ export abstract class BasePage {
   ): Promise<void> {
     if (!this.attachFn || !this.stepCounter) return;
     try {
+      await this.waitForVisualStability();
       const screenshot = await this.page.screenshot({ fullPage: false });
       this.stepCounter.value++;
       const card = renderCard(this.stepCounter.value, type, description, code, screenshot, false);
