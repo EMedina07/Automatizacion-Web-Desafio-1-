@@ -1,62 +1,35 @@
 import { Given, Then, When } from '@cucumber/cucumber';
-import { expect } from '@playwright/test';
+import { CustomWorld } from '../../../support/world';
 import { LoginPage } from '../../../pages/LoginPage';
 import { JsonDataManagement } from '../../../../core/data_management/JsonDataManagement';
+import { UserData } from '../../../../core/interfaces/UserData';
 import environments from '../../../../core/settings/EnvironmentSettings';
-import { CustomWorld } from '../../../support/world';
-import { LoginData } from '../../../../core/interfaces/LoginData';
-import { renderTimingCard } from '../../../../core/framework_actions/StepLogger';
 
-interface LoginWorld extends CustomWorld {
-  loginResponseTime?: number;
-}
-
-Given('el usuario está en la página de login', async function (this: CustomWorld) {
-  await this.getPage(LoginPage).navigateTo();
+Given('the user is on the login page', async function (this: CustomWorld) {
+  await this.getPage(LoginPage).navigateToLogin();
 });
 
-When('el usuario inicia sesión con el usuario {string}', async function (this: CustomWorld, dataId: string) {
-  const data = JsonDataManagement.getById<LoginData>(environments.env, 'login', dataId);
-  const loginPage = this.getPage(LoginPage);
-  await loginPage.fillUsername(data.username);
-  await loginPage.fillPassword(data.password);
-  await loginPage.clickLogin();
+When(
+  'the user logs in with credentials {string}',
+  async function (this: CustomWorld, userId: string) {
+    const user = JsonDataManagement.getById<UserData>(environments.env, 'users', userId);
+    await this.getPage(LoginPage).login(user.username, user.password);
+  },
+);
+
+Then('the user is redirected to the profile page', async function (this: CustomWorld) {
+  await this.getPage(LoginPage).assertLoginSuccess();
 });
 
-Then('el usuario es redirigido al dashboard', async function (this: CustomWorld) {
-  await this.getPage(LoginPage).assertOnDashboard();
+Then('the session username is visible in the profile', async function (this: CustomWorld) {
+  const user = JsonDataManagement.getById<UserData>(environments.env, 'users', 'valid');
+  await this.getPage(LoginPage).assertUsernameDisplayed(user.username);
 });
 
-Then('se muestran los mensajes de campo requerido', async function (this: CustomWorld) {
-  await this.getPage(LoginPage).assertFieldRequired();
-});
-
-Then('se muestra el error de credenciales inválidas', async function (this: CustomWorld) {
+Then('an invalid credentials error message is displayed', async function (this: CustomWorld) {
   await this.getPage(LoginPage).assertInvalidCredentialsError();
 });
 
-When('el usuario intenta acceder directamente al dashboard sin autenticarse', async function (this: CustomWorld) {
-  await this.getPage(LoginPage).attemptDirectDashboardAccess();
-});
-
-Then('el sistema redirige a la página de login', async function (this: CustomWorld) {
-  await this.getPage(LoginPage).assertOnLoginPage();
-});
-
-Then('el sistema no ejecuta el payload y muestra error de credenciales', async function (this: CustomWorld) {
-  await this.getPage(LoginPage).assertXssNotExecuted();
-});
-
-When('el usuario inicia sesión con {string} y se registra el tiempo de respuesta', async function (this: LoginWorld, dataId: string) {
-  const data = JsonDataManagement.getById<LoginData>(environments.env, 'login', dataId);
-  const elapsed = await this.getPage(LoginPage).loginWithTiming(data.username, data.password);
-  this.loginResponseTime = elapsed;
-});
-
-Then('el tiempo de respuesta es menor a {int} milisegundos', function (this: LoginWorld, threshold: number) {
-  expect(this.loginResponseTime).toBeDefined();
-  const elapsed = this.loginResponseTime!;
-  const card = renderTimingCard(elapsed, threshold, 'Tiempo de respuesta del login');
-  this.attach(card, 'text/html');
-  expect(elapsed).toBeLessThan(threshold);
+Then('the user remains on the login page', async function (this: CustomWorld) {
+  await this.getPage(LoginPage).assertRemainsOnLoginPage();
 });

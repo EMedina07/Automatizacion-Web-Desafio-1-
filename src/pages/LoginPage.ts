@@ -1,83 +1,96 @@
-import { Locator, Page } from 'playwright';
-import { PageHelpers } from './PageHelpers';
+import { Page } from 'playwright';
+import { expect } from '@playwright/test';
+import { BasePage } from './BasePage';
 import { IAttachFn } from '../../core/framework_actions/StepLogger';
 
-const LOGIN_PATH = '/web/index.php/auth/login';
-const DASHBOARD_PATH = '/web/index.php/dashboard/index';
-const DASHBOARD_URL_FRAGMENT = '**/dashboard/index';
+const LOGIN_URL = 'https://demoqa.com/login';
+const PROFILE_PATH = '/profile';
 
-export class LoginPage extends PageHelpers {
-  private readonly usernameInput: Locator;
-  private readonly passwordInput: Locator;
-  private readonly loginButton: Locator;
-  private readonly fieldErrorMessages: Locator;
-  private readonly credentialsError: Locator;
-  private readonly sidebarMenu: Locator;
+export class LoginPage extends BasePage {
+  private readonly usernameInput = this.page.locator('#userName');
+  private readonly passwordInput = this.page.locator('#password');
+  private readonly loginButton = this.page.locator('#login');
+  private readonly logoutButton = this.page.locator('#submit');
+  private readonly usernameDisplay = this.page.locator('#userName-value');
+  private readonly errorOutput = this.page.locator('#output');
 
   constructor(page: Page, attachFn?: IAttachFn, stepCounter?: { value: number }) {
     super(page, attachFn, stepCounter);
-    this.usernameInput = page.getByPlaceholder('Username');
-    this.passwordInput = page.getByPlaceholder('Password');
-    this.loginButton = page.getByRole('button', { name: 'Login' });
-    this.fieldErrorMessages = page.locator('.oxd-input-field-error-message');
-    this.credentialsError = page.locator('.orangehrm-login-error');
-    this.sidebarMenu = page.locator('div.oxd-main-menu');
   }
 
-  async navigateTo(): Promise<void> {
-    await this.navigateAndCapture(LOGIN_PATH, this.loginButton, 'Página de login cargada');
+  async navigateToLogin(): Promise<void> {
+    await this.navigate(LOGIN_URL);
   }
 
-  async fillUsername(value: string): Promise<void> {
-    await this.fillField(this.usernameInput, value, 'Username');
+  async enterUsername(username: string): Promise<void> {
+    await this.fillField(this.usernameInput, username, 'Username');
   }
 
-  async fillPassword(value: string): Promise<void> {
-    await this.fillField(this.passwordInput, value, 'Password', true);
+  async enterPassword(password: string): Promise<void> {
+    await this.fillField(this.passwordInput, password, 'Password', true);
   }
 
   async clickLogin(): Promise<void> {
-    await this.clickElement(this.loginButton, 'botón Login');
+    await this.clickElement(this.loginButton, 'Login button');
   }
 
-  async assertOnDashboard(): Promise<void> {
-    await this.assertUrlMatchesWithElement(
-      DASHBOARD_URL_FRAGMENT,
-      this.sidebarMenu,
-      'Verifica redirección al dashboard',
+  async login(username: string, password: string): Promise<void> {
+    await this.enterUsername(username);
+    await this.enterPassword(password);
+    await this.clickLogin();
+  }
+
+  async assertLoginSuccess(): Promise<void> {
+    await this.assertCapture(
+      'User is redirected to the profile page after login',
+      `expect(page.url()).toContain('${PROFILE_PATH}')`,
+      async () => {
+        await this.page.waitForURL(`**${PROFILE_PATH}`, { timeout: 15_000 });
+        expect(this.page.url()).toContain(PROFILE_PATH);
+      },
     );
   }
 
-  async assertOnLoginPage(): Promise<void> {
-    await this.assertUrlContains('/auth/login', this.loginButton, 'Verifica que el sistema redirigió a la página de login');
+  async assertUsernameDisplayed(expectedUsername: string): Promise<void> {
+    await this.assertCapture(
+      `Username "${expectedUsername}" is visible in the profile`,
+      `expect(#userName-value).toContainText('${expectedUsername}')`,
+      async () => {
+        await expect(this.usernameDisplay).toBeVisible({ timeout: 10_000 });
+        await expect(this.usernameDisplay).toContainText(expectedUsername);
+      },
+    );
   }
 
-  async assertFieldRequired(): Promise<void> {
-    await this.assertAllTextsEqual(this.fieldErrorMessages, 'Required', 'Verifica mensajes "Required" en campos obligatorios vacíos');
+  async assertLogoutButtonVisible(): Promise<void> {
+    await this.assertCapture(
+      'Log Out button is visible — user session is active',
+      `expect(#submit).toBeVisible()`,
+      async () => {
+        await expect(this.logoutButton).toBeVisible({ timeout: 10_000 });
+      },
+    );
   }
 
   async assertInvalidCredentialsError(): Promise<void> {
-    await this.assertLocatorText(this.credentialsError, 'Invalid credentials', 'Verifica error "Invalid credentials"', 30_000);
-  }
-
-  async assertXssNotExecuted(): Promise<void> {
-    await this.assertXssPayloadBlocked(this.credentialsError, 'Invalid credentials', 'Verifica que el payload XSS no se ejecutó en la página');
-  }
-
-  async attemptDirectDashboardAccess(): Promise<void> {
-    await this.navigateAndWaitForRedirect(
-      DASHBOARD_PATH,
-      /\/(dashboard|auth\/login)/,
-      'Intenta acceder al dashboard sin autenticación',
+    await this.assertCapture(
+      '"Invalid username or password!" error message is displayed',
+      `expect(#output).toContainText('Invalid username or password!')`,
+      async () => {
+        await expect(this.errorOutput).toContainText('Invalid username or password!', {
+          timeout: 10_000,
+        });
+      },
     );
   }
 
-  async loginWithTiming(username: string, password: string): Promise<number> {
-    await this.fillUsername(username);
-    await this.fillPassword(password);
-    const start = Date.now();
-    await this.clickLogin();
-    await this.assertOnDashboard();
-    return Date.now() - start;
+  async assertRemainsOnLoginPage(): Promise<void> {
+    await this.assertCapture(
+      'User remains on the login page after failed login',
+      `expect(page.url()).toContain('/login')`,
+      async () => {
+        expect(this.page.url()).toContain('/login');
+      },
+    );
   }
 }

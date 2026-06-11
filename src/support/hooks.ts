@@ -1,10 +1,32 @@
 import { After, AfterStep, Before, BeforeAll, setDefaultTimeout } from '@cucumber/cucumber';
 import { renderSkippedCard } from '../../core/framework_actions/StepLogger';
 import * as fs from 'fs';
+import * as https from 'https';
 import * as path from 'path';
 import { chromium } from 'playwright';
 import { launchOptions, contextOptions } from '../config/browser.config';
 import { CustomWorld } from './world';
+
+async function ensureTestUserExists(userName: string, password: string): Promise<void> {
+  return new Promise((resolve) => {
+    const payload = JSON.stringify({ userName, password });
+    const req = https.request(
+      {
+        hostname: 'demoqa.com',
+        path: '/Account/v1/User',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) },
+      },
+      (res) => {
+        res.resume();
+        res.on('end', () => resolve());
+      },
+    );
+    req.on('error', () => resolve());
+    req.write(payload);
+    req.end();
+  });
+}
 
 setDefaultTimeout(60_000);
 
@@ -23,9 +45,10 @@ function buildVideoName(scenarioSlug: string, status: 'PASSED' | 'FAILED'): stri
   return `${scenarioSlug}_${date}_${status}.webm`;
 }
 
-BeforeAll(function () {
+BeforeAll(async function () {
   fs.mkdirSync(path.join('test-results', 'traces'), { recursive: true });
   fs.mkdirSync(path.join('test-results', 'videos'), { recursive: true });
+  await ensureTestUserExists('testUserQA1', 'Test@1234!');
 });
 
 Before(async function (this: CustomWorld, scenario) {

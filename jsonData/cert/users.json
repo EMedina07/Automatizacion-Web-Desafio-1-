@@ -1,11 +1,14 @@
 [
   {
-    "id": "1",
-    "name": "Test User Cert",
-    "email": "test.cert@example.com",
-    "phone": "8099876543",
-    "subject": "Consulta certificacion",
-    "message": "Este es un mensaje de prueba para cert",
-    "country": "Dominican Republic"
+    "id": "valid",
+    "username": "testUserQA1",
+    "password": "Test@1234!",
+    "type": "valid"
+  },
+  {
+    "id": "invalid",
+    "username": "wrongUser99",
+    "password": "WrongPass!99",
+    "type": "invalid"
   }
 ]
